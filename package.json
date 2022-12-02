@@ -1,0 +1,42 @@
+{
+  "name": "deposit-erc-721-pos",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "clean": "npx hardhat clean",
+    "compile": "npx hardhat compile",
+    "deploy:rootNFT": "npx hardhat run --network goerli scripts/deploy/deploy_RootToken.ts",
+    "deploy:childNFT": "npx hardhat run --network mumbai scripts/deploy/deploy_childToken.ts",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Gulam Rasul Shah",
+  "license": "MIT",
+  "dependencies": {
+    "@maticnetwork/maticjs": "^3.5.0",
+    "@maticnetwork/maticjs-web3": "^1.0.3",
+    "@maticnetwork/pos-portal": "^1.5.2",
+    "@nomiclabs/hardhat-ethers": "^2.2.1",
+    "@nomiclabs/hardhat-etherscan": "^3.1.3",
+    "@nomiclabs/hardhat-waffle": "^2.0.3",
+    "@openzeppelin/contracts": "^4.8.0",
+    "@truffle/hdwallet-provider": "^2.0.15",
+    "@typechain/ethers-v5": "^10.1.1",
+    "@typechain/hardhat": "^6.1.4",
+    "@types/node": "^18.11.10",
+    "dotenv": "^16.0.3",
+    "ethereum-waffle": "^3.4.4",
+    "ethers": "^5.7.2",
+    "hardhat": "^2.12.3",
+    "hardhat-gas-reporter": "^1.0.9",
+    "lint-staged": "^13.0.4",
+    "prettier": "^2.8.0",
+    "prettier-plugin-solidity": "^1.0.0",
+    "solidity-coverage": "^0.7.22",
+    "ts-node": "^10.9.1",
+    "typechain": "^8.1.1",
+    "typescript": "^4.9.3"
+  },
+  "lint-staged": {
+    "*.{ts,json,sol,md,yml}": "prettier --write"
+  }
+}
