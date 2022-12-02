@@ -5,6 +5,8 @@ import config from "./utils/config";
 import ps from "prompt-sync";
 const prompt = ps();
 const depositERC721 = async () => {
+    console.log("STARING THE ERC721 TOKEN WITH ITS METADATA BRIDGING PROCESS");
+
     /* ----------------- INPUT ------------------ */
 
     console.log("\n");
@@ -24,7 +26,10 @@ const depositERC721 = async () => {
     // APPROVE NFT
     const approveResponse = await erc721RootToken.approve(tokenID);
     console.log("\nToken Approved successfully");
-    console.log("Approve txn Hash: ", await approveResponse.getTransactionHash());
+    console.log("Approve transaction hash: ", await approveResponse.getTransactionHash());
+    console.log(
+        `Transaction details: https://goerli.etherscan.io/tx/${await approveResponse.getTransactionHash()}`
+    );
 
     // WAIT PERIOD
     console.log("\nWaiting at least 60secs for the for block confirmation...");
@@ -39,12 +44,15 @@ const depositERC721 = async () => {
         data: encodedData,
     });
     console.log(`\nToken Deposited successfully to ERC721Predicate Contract`);
-    console.log("Deposit tx hash: ", await depositResponse.getTransactionHash());
+    console.log("Deposit transaction hash: ", await depositResponse.getTransactionHash());
+    console.log(
+        `Transaction details: https://goerli.etherscan.io/tx/${await depositResponse.getTransactionHash()}`
+    );
 };
 
 depositERC721()
     .then(() => {
-        console.log("\nEnding process\n");
+        console.log("\nENDING PROCESS\n");
         process.exit(0);
     })
     .catch((err) => {
