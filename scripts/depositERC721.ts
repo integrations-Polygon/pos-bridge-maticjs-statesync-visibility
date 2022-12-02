@@ -2,16 +2,19 @@ import { ethers } from "ethers";
 import sleep from "./util/sleep";
 import getMaticClient from "./util/setupMaticjsClient.js";
 import config from "./util/config.js";
-
+import ps from "prompt-sync";
+const prompt = ps();
 const depositERC721 = async () => {
-    /*
-        SUBJECT TO CHANGE 
-    */
+    /* ----------------- INPUT ------------------ */
 
-    const tokenID = 3;
-    const tokenUri = "nice";
+    const tokenID: any = prompt("Enter the Token ID to bridge: ");
+    if (!tokenID) return console.log("Token ID cannot be null");
+    if (tokenID < 0) return console.log("Invalid Token ID");
 
-    /* ---------------------------------------- */
+    const tokenUri = prompt("Enter the tokenUri: ");
+    if (!tokenID) return console.log("Token ID cannot be null");
+
+    /* ------------------------------------------ */
 
     // SETUP MATIC CLIENT
     const posClient = await getMaticClient();
