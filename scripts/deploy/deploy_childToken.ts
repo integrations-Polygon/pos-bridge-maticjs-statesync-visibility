@@ -8,7 +8,7 @@ const childChainManagerProxy: any = process.env.CHILD_CHAIN_MANAGER_PROXY;
 async function deploy() {
     // get the contract to deploy
     const MyChildNFT = (await ethers.getContractFactory("MyChildNFT")) as MyChildNFT__factory;
-    const myChildNFT = await MyChildNFT.deploy(childChainManagerProxy);
+    const myChildNFT = await MyChildNFT.deploy("MyChildNFT", "McF", childChainManagerProxy);
     console.log("\nDeploying MyChildNFT smart contract on Polygon Mumbai chain....");
     function delay(ms: number) {
         return new Promise((resolve) => setTimeout(resolve, ms));
