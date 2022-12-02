@@ -1,5 +1,5 @@
 import dotenv from "dotenv";
-import user from "./config.js";
+import user from "./config";
 import { POSClient, use } from "@maticnetwork/maticjs";
 import HDWalletProvider from "@truffle/hdwallet-provider";
 import { Web3ClientPlugin } from "@maticnetwork/maticjs-web3";
