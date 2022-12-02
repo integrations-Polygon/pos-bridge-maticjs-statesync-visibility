@@ -4,8 +4,15 @@ import getMaticClient from "./util/setupMaticjsClient.js";
 import config from "./util/config.js";
 
 const depositERC721 = async () => {
+    /*
+        SUBJECT TO CHANGE 
+    */
+
     const tokenID = 3;
     const tokenUri = "nice";
+
+    /* ---------------------------------------- */
+
     // SETUP MATIC CLIENT
     const posClient = await getMaticClient();
     let erc721RootToken = await posClient.erc721(config.rootToken, true);
