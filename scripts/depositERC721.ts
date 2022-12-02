@@ -39,7 +39,7 @@ const depositERC721 = async () => {
     console.log("\n-----------------------------------------");
     console.log("WAITING PERIOD - WAIT FOR AT LEAST 60 SEC");
     console.log("-----------------------------------------\n");
-    console.log("\nWaiting at least 60 sec...");
+    console.log("Waiting at least 60 sec...");
     await sleep(60000); // wait at least 1 min for state change in goerli
 
     // ENCODE DATA
