@@ -1,7 +1,7 @@
 import { ethers } from "ethers";
-import sleep from "./util/sleep";
-import getMaticClient from "./util/setupMaticjsClient.js";
-import config from "./util/config.js";
+import sleep from "./utils/sleep";
+import getMaticClient from "./utils/setupMaticjsClient.js";
+import config from "./utils/config.js";
 import ps from "prompt-sync";
 const prompt = ps();
 const depositERC721 = async () => {
