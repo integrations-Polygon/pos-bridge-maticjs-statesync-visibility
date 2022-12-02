@@ -10,12 +10,12 @@ const depositERC721 = async () => {
     /* ----------------- INPUT ------------------ */
 
     console.log("\n");
-    const tokenID: any = prompt("Enter the Token ID to bridge: ");
-    if (!tokenID) return console.log("Token ID cannot be null");
-    if (tokenID < 0) return console.log("Invalid Token ID");
+    const tokenID: any = prompt("Enter the tokenID to bridge: ");
+    if (!tokenID) return console.log("tokenID cannot be null");
+    if (tokenID < 0) return console.log("Invalid tokenID");
 
     const tokenUri = prompt("Enter the tokenUri: ");
-    if (!tokenID) return console.log("Token ID cannot be null");
+    if (!tokenUri) return console.log("tokenUri cannot be null");
 
     /* ------------------------------------------ */
 
