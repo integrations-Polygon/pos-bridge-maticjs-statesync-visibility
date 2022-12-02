@@ -25,6 +25,9 @@ const depositERC721 = async () => {
     const approveResponse = await erc721RootToken.approve(tokenID);
     console.log("\nToken Approved successfully");
     console.log("Approve txn Hash: ", await approveResponse.getTransactionHash());
+
+    // WAIT PERIOD
+    console.log("\nWaiting at least 60secs for the for block confirmation...");
     await sleep(60000); // wait at least 1 min for state change in goerli
 
     // ENCODE DATA
