@@ -7,6 +7,7 @@ const prompt = ps();
 const depositERC721 = async () => {
     /* ----------------- INPUT ------------------ */
 
+    console.log("\n");
     const tokenID: any = prompt("Enter the Token ID to bridge: ");
     if (!tokenID) return console.log("Token ID cannot be null");
     if (tokenID < 0) return console.log("Invalid Token ID");
@@ -21,7 +22,7 @@ const depositERC721 = async () => {
     let erc721RootToken = await posClient.erc721(config.rootToken, true);
 
     // APPROVE NFT
-    const approveResponse = await erc721RootToken.approve(tokenID.toString());
+    const approveResponse = await erc721RootToken.approve(tokenID);
     console.log("\nToken Approved successfully");
     console.log("Approve txn Hash: ", await approveResponse.getTransactionHash());
     await sleep(60000); // wait at least 1 min for state change in goerli
@@ -31,7 +32,7 @@ const depositERC721 = async () => {
     const encodedData = abiCoder.encode(["uint", "address", "string"], [tokenID, config.user, tokenUri]);
 
     // DEPOSIT NFT
-    let depositResponse = await erc721RootToken.deposit(tokenID.toString(), config.user, {
+    let depositResponse = await erc721RootToken.deposit(tokenID, config.user, {
         data: encodedData,
     });
     console.log(`\nToken Deposited successfully to ERC721Predicate Contract`);

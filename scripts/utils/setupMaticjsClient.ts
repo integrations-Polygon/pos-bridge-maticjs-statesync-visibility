@@ -1,5 +1,5 @@
 import dotenv from "dotenv";
-import user from "./config";
+import config from "./config";
 import { POSClient, use } from "@maticnetwork/maticjs";
 import HDWalletProvider from "@truffle/hdwallet-provider";
 import { Web3ClientPlugin } from "@maticnetwork/maticjs-web3";
@@ -23,7 +23,7 @@ const getMaticClient = async () => {
                 `https://goerli.infura.io/v3/${INFURA_GOERLI_PROJECT_ID}`
             ),
             defaultConfig: {
-                from: user,
+                from: config.depositor,
             },
         },
         child: {
@@ -32,7 +32,7 @@ const getMaticClient = async () => {
                 `https://polygon-mumbai.infura.io/v3/${INFURA_POLYGON_PROJECT_ID}`
             ),
             defaultConfig: {
-                from: user,
+                from: config.depositor,
             },
         },
     });
