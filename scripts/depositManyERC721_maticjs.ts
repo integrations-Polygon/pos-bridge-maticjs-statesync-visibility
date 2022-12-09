@@ -40,9 +40,14 @@ const depositERC721 = async () => {
         console.log("-----------------------------------------\n");
         for (let i = 0; i < totalArgs; i++) {
             let approveResponse = await erc721RootToken.approve(tokenIds[i]);
-            await sleep(60000); // wait at least 1 min for state change in goerli
-            console.log(`Approve transaction hash for tokenId ${tokenIds[i]}: `, approveResponse.hash);
-            console.log(`Transaction details: https://goerli.etherscan.io/tx/${approveResponse.hash}`);
+            await sleep(20000); // wait at least 15 for state change in goerli
+            console.log(
+                `Approve transaction hash for tokenId ${tokenIds[i]}: `,
+                await approveResponse.getTransactionHash()
+            );
+            console.log(
+                `Transaction details: https://goerli.etherscan.io/tx/${await approveResponse.getTransactionHash()}`
+            );
         }
         console.log("\nTokens Approved successfully");
 
