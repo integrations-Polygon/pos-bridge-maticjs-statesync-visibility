@@ -39,23 +39,12 @@ const depositERC721 = async () => {
         console.log("APPROVE - ERC721 PREDICATE PROXY CONTRACT");
         console.log("-----------------------------------------\n");
         for (let i = 0; i < totalArgs; i++) {
-            let approveResponse = await erc721RootToken.approve(config.ERC721PredicateProxy, tokenIds[i]);
-            await approveResponse.wait();
+            let approveResponse = await erc721RootToken.approve(tokenIds[i]);
+            await sleep(60000); // wait at least 1 min for state change in goerli
             console.log(`Approve transaction hash for tokenId ${tokenIds[i]}: `, approveResponse.hash);
             console.log(`Transaction details: https://goerli.etherscan.io/tx/${approveResponse.hash}`);
         }
         console.log("\nTokens Approved successfully");
-
-        /* --------------------------- WAIT PERIOD ------------------------- */
-
-        /* 
-            WAIT PERIOD
-        */
-        console.log("\n-----------------------------------------");
-        console.log("WAITING PERIOD - WAIT FOR AT LEAST 60 SEC");
-        console.log("-----------------------------------------\n");
-        console.log("Waiting at least 60 sec...");
-        await sleep(60000); // wait at least 1 min for state change in goerli
 
         /* ---------------------------- DEPOSIT ---------------------------- */
 
@@ -72,7 +61,7 @@ const depositERC721 = async () => {
         );
         console.log(`\nToken Deposited successfully to ERC721Predicate Contract`);
     } catch (error) {
-        console.log("Error in despositERC721");
+        console.log("Error in despositERC721: ", error);
     }
 };
 
