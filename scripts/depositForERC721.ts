@@ -11,17 +11,21 @@ const projectID = process.env.INFURA_GOERLI_PROJECT_ID;
 
 const despositForERC721 = async () => {
     try {
+        // Empty array to store user input arguments
+        let tokenIds: any = [];
         console.log("\n-----------------------------------------");
         console.log("BRIDGE ERC721 TOKEN WITH METADATA PROCESS");
         console.log("-----------------------------------------\n");
         /* ---------------------------- INPUT ------------------------------ */
 
-        const tokenID: any = prompt("Enter the tokenID to bridge: ");
-        if (!tokenID) return console.log("tokenID cannot be null");
-        if (tokenID < 0) return console.log("Invalid tokenID");
-
-        const tokenUri = prompt("Enter the tokenUri: ");
-        if (!tokenUri) return console.log("tokenUri cannot be null");
+        const totalArgs = prompt("Enter the total number of tokenIds to batch deposit: ");
+        if (!totalArgs) return console.log("Total number of argument cannot be null");
+        if (totalArgs !== 0) {
+            for (let i = 0; i < totalArgs; i++) {
+                tokenIds[i] = prompt(`Enter your tokenId one by one [${i + 1}]: `);
+                if (tokenIds[i] < 0) return console.log("Invalid tokenID");
+            }
+        }
 
         /* ---------------------------- SETUP ------------------------------ */
 
@@ -57,11 +61,13 @@ const despositForERC721 = async () => {
         console.log("\n-----------------------------------------");
         console.log("APPROVE - ERC721 PREDICATE PROXY CONTRACT");
         console.log("-----------------------------------------\n");
-        const approveResponse = await rootToken.approve(config.ERC721PredicateProxy, tokenID);
-        await approveResponse.wait(1); // wait for 1 block confirmation
-        console.log("Approve transaction hash: ", approveResponse.hash);
-        console.log(`Transaction details: https://goerli.etherscan.io/tx/${approveResponse.hash}`);
-        console.log("\nToken Approved successfully");
+        for (let i = 0; i < totalArgs; i++) {
+            let approveResponse = await rootToken.approve(config.ERC721PredicateProxy, tokenIds[i]);
+            await approveResponse.wait(1); // wait for 1 block confirmation
+            console.log(`Approve transaction hash for tokenId ${tokenIds[i]}: `, approveResponse.hash);
+            console.log(`Transaction details: https://goerli.etherscan.io/tx/${approveResponse.hash}`);
+        }
+        console.log("\nTokens Approved successfully");
 
         /* ---------------------------- DEPOSIT ---------------------------- */
 
@@ -87,8 +93,7 @@ const despositForERC721 = async () => {
             ENCODE DEPOSITDATA
         */
         const abiCoder = ethers.utils.defaultAbiCoder;
-        const depositData = abiCoder.encode(["uint"], [tokenID]);
-        console.log(depositData);
+        const depositData = abiCoder.encode(["uint256[]"], [tokenIds]);
 
         /* 
             DEPOSIT ROOT TOKEN THROUGH ROOT CHAIN MANAGER
