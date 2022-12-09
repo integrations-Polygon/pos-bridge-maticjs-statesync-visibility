@@ -44,7 +44,7 @@ const depositERC721 = async () => {
 
     // ENCODE DATA
     const abiCoder = ethers.utils.defaultAbiCoder;
-    const depositData = abiCoder.encode(["uint", "address", "string"], [tokenID, config.user, tokenUri]);
+    const depositData = abiCoder.encode(["uint"], [tokenID]);
 
     // DEPOSIT NFT
     console.log("\n-----------------------------------------");

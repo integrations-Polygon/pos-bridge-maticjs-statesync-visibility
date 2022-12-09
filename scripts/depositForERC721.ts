@@ -87,10 +87,7 @@ const despositForERC721 = async () => {
             ENCODE DEPOSITDATA
         */
         const abiCoder = ethers.utils.defaultAbiCoder;
-        const depositData = abiCoder.encode(
-            ["uint", "address", "string"],
-            [tokenID, config.rootToken, tokenUri]
-        );
+        const depositData = abiCoder.encode(["uint"], [tokenID]);
         console.log(depositData);
 
         /* 
