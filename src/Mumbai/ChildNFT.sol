@@ -9,7 +9,7 @@ import { NativeMetaTransaction } from "../utils/NativeMetaTransaction.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 import { AccessControl } from "@openzeppelin/contracts/access/AccessControl.sol";
 
-contract MyChildNFT is IChildToken, AccessControlMixin, NativeMetaTransaction, ContextMixin, ERC721URIStorage, Ownable {
+contract ChildNFT is IChildToken, AccessControlMixin, NativeMetaTransaction, ContextMixin, ERC721URIStorage, Ownable {
     bytes32 public constant DEPOSITOR_ROLE = keccak256("DEPOSITOR_ROLE");
 
     // limit batching of tokens due to gas limit restrictions
@@ -17,7 +17,7 @@ contract MyChildNFT is IChildToken, AccessControlMixin, NativeMetaTransaction, C
     event WithdrawnBatch(address indexed user, uint256[] tokenIds);
 
     constructor(string memory _name, string memory _symbol, address _childChainManager) ERC721(_name, _symbol) {
-        _setupContractId("MyChildNFT");
+        _setupContractId("ChildNFT");
         _setupRole(DEFAULT_ADMIN_ROLE, _msgSender());
         _setupRole(DEPOSITOR_ROLE, _childChainManager);
         _initializeEIP712(_name);
@@ -59,22 +59,16 @@ contract MyChildNFT is IChildToken, AccessControlMixin, NativeMetaTransaction, C
         // deposit single
         if (depositData.length == 32) {
             uint256 tokenId;
-            string memory uri;
-            address user_address;
-            (tokenId, user_address, uri) = abi.decode(depositData, (uint256, address, string));
+            (tokenId) = abi.decode(depositData, (uint256));
             _mint(user, tokenId);
-            _setTokenURI(tokenId, uri);
         }
         // deposit batch
         else {
             uint256[] memory tokenIds;
-            string[] memory uris;
-            address[] memory user_addresses;
-            (tokenIds, user_addresses, uris) = abi.decode(depositData, (uint256[], address[], string[]));
+            (tokenIds) = abi.decode(depositData, (uint256[]));
             uint256 length = tokenIds.length;
             for (uint256 i; i < length; i++) {
-                _mint(user_addresses[i], tokenIds[i]);
-                _setTokenURI(tokenIds[i], uris[i]);
+                _mint(user, tokenIds[i]);
             }
         }
     }
