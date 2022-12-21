@@ -1,5 +1,5 @@
 import { ChildNFT__factory } from "../../src/types";
-import config from "../utils/config";
+import config from "../../utils/config";
 import { ethers } from "hardhat";
 import dotenv from "dotenv";
 dotenv.config();

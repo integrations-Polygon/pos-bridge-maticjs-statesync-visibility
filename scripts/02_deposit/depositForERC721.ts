@@ -1,5 +1,5 @@
-import fetchAbiData from "./utils/fetchAbiData";
-import config from "./utils/config";
+import fetchAbiData from "../../utils/fetchAbiData";
+import config from "../../utils/config";
 import { ethers } from "ethers";
 import dotenv from "dotenv";
 import ps from "prompt-sync";

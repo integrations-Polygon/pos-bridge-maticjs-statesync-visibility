@@ -1,6 +1,6 @@
-import sleep from "./utils/sleep";
-import getMaticClient from "./utils/setupMaticjsClient";
-import config from "./utils/config";
+import sleep from "../../utils/sleep";
+import getMaticClient from "../../utils/setupMaticjsClient";
+import config from "../../utils/config";
 import ps from "prompt-sync";
 const prompt = ps();
 const depositERC721 = async () => {

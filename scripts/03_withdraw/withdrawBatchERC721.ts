@@ -1,7 +1,7 @@
-import fetchAbiData from "./utils/fetchAbiData";
-import config from "./utils/config";
+import { fetchGasPrice } from "../../utils/fetchGasPrice";
+import fetchAbiData from "../../utils/fetchAbiData";
+import config from "../../utils/config";
 import { ethers } from "ethers";
-import { fetchGasPrice } from "./utils/fetchGasPrice";
 import dotenv from "dotenv";
 import ps from "prompt-sync";
 const prompt = ps();
@@ -15,8 +15,9 @@ const withdrawbatch_contract = async () => {
         // Empty array to store user input arguments
         let tokenIds: any = [];
         console.log("\n-----------------------------------------");
-        console.log("BRIDGE ERC721 TOKEN WITH METADATA PROCESS");
+        console.log("BRIDGE ERC721 TOKEN PROCESS");
         console.log("-----------------------------------------\n");
+
         /* ---------------------------- INPUT ------------------------------ */
 
         const totalArgs = prompt("Enter the total number of tokenIds to batch withdraw: ");
@@ -27,6 +28,7 @@ const withdrawbatch_contract = async () => {
                 if (tokenIds[i] < 0) return console.log("Invalid tokenID");
             }
         }
+
         /* ---------------------------- SETUP ------------------------------ */
 
         /* 
@@ -43,7 +45,6 @@ const withdrawbatch_contract = async () => {
         // Fetch the latest gas price data from the polygon v2 gas station API
         const { maxFee, maxPriorityFee }: any = await fetchGasPrice();
 
-
         /* ---------------------------- BURN ---------------------------- */
 
         /* 
@@ -57,11 +58,7 @@ const withdrawbatch_contract = async () => {
         /* 
             INITIALIZE ROOT CHAIN MAMANGER INSTANCE 
         */
-        const childTokenInstance = new ethers.Contract(
-            childTokenAddress,
-            childTokenManagerABI,
-            provider
-        );
+        const childTokenInstance = new ethers.Contract(childTokenAddress, childTokenManagerABI, provider);
         const childTokenManager = childTokenInstance.connect(signer);
 
         /* --EstimateGas-- */
@@ -85,12 +82,11 @@ const withdrawbatch_contract = async () => {
 
         console.log("withdraw transaction hash: ", burnTx);
         console.log(`Transaction details: https://mumbai.polygonscan.com/tx/${burnTx}`);
-        console.log(`\nToken burned successfully to child token Contract`);
+        console.log(`\nToken burned successfully on child chain.`);
     } catch (e) {
         console.log(e);
-
     }
-}
+};
 
 withdrawbatch_contract()
     .then(() => {
