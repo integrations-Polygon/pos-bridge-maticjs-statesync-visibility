@@ -1,6 +1,6 @@
-const ps = require("prompt-sync");
-const prompt = ps();
 import getMaticClient from "./setupMaticjsClient";
+import ps from "prompt-sync";
+const prompt = ps();
 
 async function isCheckPointed() {
     try {
