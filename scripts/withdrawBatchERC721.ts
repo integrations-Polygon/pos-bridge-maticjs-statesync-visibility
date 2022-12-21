@@ -41,7 +41,7 @@ const withdrawbatch_contract = async () => {
         const nonce = await provider.getTransactionCount(signer.address);
 
         // Fetch the latest gas price data from the polygon v2 gas station API
-        const { maxFee, maxPriorityFee } : any = await fetchGasPrice();
+        const { maxFee, maxPriorityFee }: any = await fetchGasPrice();
 
 
         /* ---------------------------- BURN ---------------------------- */
@@ -91,3 +91,13 @@ const withdrawbatch_contract = async () => {
 
     }
 }
+
+withdrawbatch_contract()
+    .then(() => {
+        console.log("\n\n---------- ENDING ALL PROCESS ----------\n\n");
+        process.exit(0);
+    })
+    .catch((error) => {
+        console.error("error", error);
+        process.exit(1);
+    });
