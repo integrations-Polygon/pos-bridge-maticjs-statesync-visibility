@@ -7,8 +7,8 @@ import ps from "prompt-sync";
 const prompt = ps();
 dotenv.config();
 
-const pKey: any = process.env.PRIVATE_KEY_GOERLI;
-const projectID = process.env.INFURA_GOERLI_PROJECT_ID;
+const pKey: any = process.env.PRIVATE_KEY_POLYGON;
+const projectID = process.env.INFURA_POLYGON_PROJECT_ID;
 
 const withdrawbatch_contract = async () => {
     try {
@@ -34,7 +34,7 @@ const withdrawbatch_contract = async () => {
         /* 
             USING INFURA PROVIDER
         */
-        const provider = new ethers.providers.InfuraProvider("polygon", projectID);
+        const provider = new ethers.providers.InfuraProvider("maticmum", projectID);
 
         /* 
             INITIALIZE SIGNER 
@@ -52,8 +52,11 @@ const withdrawbatch_contract = async () => {
         */
         const childTokenAddress = config.childToken;
         const childTokenABIData_response = await fetchAbiData(childTokenAddress);
-        const childTokenABIData = await childTokenABIData_response.json();
-        const childTokenManagerABI = childTokenABIData.result;
+        const childTokenManagerABI = childTokenABIData_response.result;
+        /* 
+            INITIATE INTERFACE
+        */
+        const iface = new ethers.utils.Interface(childTokenManagerABI);
 
         /* 
             INITIALIZE ROOT CHAIN MAMANGER INSTANCE 
@@ -61,12 +64,15 @@ const withdrawbatch_contract = async () => {
         const childTokenInstance = new ethers.Contract(childTokenAddress, childTokenManagerABI, provider);
         const childTokenManager = childTokenInstance.connect(signer);
 
-        /* --EstimateGas-- */
-        const estimatedGasLimit = await childTokenManager.estimateGas.withdrawBatch(tokenIds, {
-            gasLimit: 14_999_999,
+        const estimatedGasLimit = await provider.estimateGas({
+            type: 2,
+            to: childTokenAddress,
+            from: config.user,
             nonce: nonce,
-            maxFeePerGas: maxFee,
+            gasLimit: 14_999_999,
             maxPriorityFeePerGas: maxPriorityFee,
+            maxFeePerGas: maxFee,
+            data: iface.encodeFunctionData("withdrawBatch", [tokenIds]),
         });
 
         /* --burn for all tokens ad save transaction Hash-- */
