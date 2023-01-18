@@ -23,6 +23,7 @@
     "@typechain/ethers-v5": "^10.1.1",
     "@typechain/hardhat": "^6.1.4",
     "@types/node": "^18.11.10",
+    "axios": "^1.2.3",
     "dotenv": "^16.0.3",
     "ethereum-waffle": "^3.4.4",
     "ethers": "^5.7.2",
