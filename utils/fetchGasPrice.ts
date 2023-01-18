@@ -1,8 +1,8 @@
-import fetch from "node-fetch";
+import axios from "axios";
 
 export async function fetchGasPrice() {
     try {
-        const gasData:any = await fetch("https://gasstation-mumbai.matic.today/v2");
+        const gasData: any = (await axios.get("https://gasstation-mumbai.matic.today/v2")).data;
 
         // Get the maxFee and maxPriorityFee for fast
         const maxFeeInGWEI = gasData.fast.maxFee;
