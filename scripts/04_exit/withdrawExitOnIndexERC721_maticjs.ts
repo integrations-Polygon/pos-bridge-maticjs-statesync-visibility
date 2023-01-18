@@ -3,14 +3,16 @@ import config from "../../utils/config";
 import ps from "prompt-sync";
 const prompt = ps();
 
-const withdrawExitERC721 = async () => {
+const withdrawExitOnIndexERC721 = async () => {
+    // Empty array to store user input arguments
     console.log("\n-----------------------------------------");
     console.log("WITHDRAW EXIT (UNLOCK) ERC721 BATCH TOKENS ON ROOT");
     console.log("-----------------------------------------\n");
 
     /* ---------------------------- INPUT ------------------------------ */
-
-    const burnHash = prompt("Enter Transaction hash of burn tokens ");
+    const totalArgs = prompt("Enter the total number of tokenIds to batch exit: ");
+    if (!totalArgs) return console.log("Total number of argument cannot be null");
+    const burnHash = prompt("Enter Transaction hash of burn tokens: ");
     if (!burnHash) return console.log("Burn transaction Hash cannot be null");
 
     /* ---------------------------- SETUP ------------------------------ */
@@ -26,14 +28,18 @@ const withdrawExitERC721 = async () => {
     /*
         USING MATICJS SUBMIT BURN TXN HASH PROOF
     */
-    const withdrawExitMany_response = await erc721RootToken.withdrawExitMany(burnHash);
+    for (let i = 0; i < totalArgs; i++) {
+        const withdrawExitOnIndex_response = await erc721RootToken.withdrawExitOnIndex(burnHash, i);
 
-    console.log("Transaction Hash: ", withdrawExitMany_response.hash);
-    console.log(`Transaction Details: https://goerli.etherscan.io/tx/${withdrawExitMany_response.hash}`);
+        console.log("Transaction Hash: ", await withdrawExitOnIndex_response.getTransactionHash());
+        console.log(
+            `Transaction Details: https://goerli.etherscan.io/tx/${await withdrawExitOnIndex_response.getTransactionHash()}`
+        );
+    }
     console.log("\nTokens successfully unlocked on Root chain.");
 };
 
-withdrawExitERC721()
+withdrawExitOnIndexERC721()
     .then(() => {
         console.log("\n\n---------- ENDING ALL PROCESS ----------\n\n");
         process.exit(0);
