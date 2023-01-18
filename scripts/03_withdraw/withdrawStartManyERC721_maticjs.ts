@@ -35,10 +35,14 @@ const withdrawERC721 = async () => {
     /*
         USING MATICJS SDK BURN BATCH ERC721
     */
-    const withdrawStartMany_response = await erc721ChildToken.withdrawStartMany(tokenIds);
+    const withdrawStartMany_response = await erc721ChildToken.withdrawStartMany(tokenIds, {
+        from: config.user,
+    });
 
-    console.log("Transaction Hash: ", withdrawStartMany_response.hash);
-    console.log(`Transaction Details: https://mumbai.polygonscan.com/${withdrawStartMany_response.hash}`);
+    console.log("Transaction Hash: ", await withdrawStartMany_response.getTransactionHash());
+    console.log(
+        `Transaction Details: https://mumbai.polygonscan.com/${await withdrawStartMany_response.getTransactionHash()}`
+    );
     console.log(`\nToken burned successfully on child chain.`);
 };
 
