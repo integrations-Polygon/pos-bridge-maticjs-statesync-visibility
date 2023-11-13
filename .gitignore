@@ -12,3 +12,5 @@ artifacts
 
 # VSCode files
 .vscode/
+
+dist

@@ -13,7 +13,6 @@ async function deploy() {
     await delay(20000);
     console.log("\nMyRootNFT smart contract deployed at: ", myRootNFT.address);
     console.log(`https://goerli.etherscan.io/address/${myRootNFT.address}/`);
-    console.log(myRootNFT);
 }
 
 deploy();

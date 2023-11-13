@@ -1,19 +1,19 @@
 {
   "name": "deposit-erc-721-pos",
-  "version": "1.0.0",
+  "version": "1.0.4",
   "description": "",
   "scripts": {
     "clean": "npx hardhat clean",
     "compile": "npx hardhat compile",
-    "deploy:rootNFT": "npx hardhat run --network goerli scripts/deploy/deploy_rootToken.ts",
-    "deploy:childNFT": "npx hardhat run --network mumbai scripts/deploy/deploy_childToken.ts",
+    "deploy:rootNFT": "npx hardhat run --network goerli scripts/01_deploy/deploy_rootToken.ts",
+    "deploy:childNFT": "npx hardhat run --network mumbai scripts/01_deploy/deploy_childToken.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Gulam Rasul Shah",
   "license": "MIT",
   "dependencies": {
-    "@maticnetwork/maticjs": "^3.5.0",
-    "@maticnetwork/maticjs-web3": "^1.0.3",
+    "@maticnetwork/maticjs": "^3.6.7",
+    "@maticnetwork/maticjs-web3": "^1.0.4",
     "@maticnetwork/pos-portal": "^1.5.2",
     "@nomiclabs/hardhat-ethers": "^2.2.1",
     "@nomiclabs/hardhat-etherscan": "^3.1.3",
