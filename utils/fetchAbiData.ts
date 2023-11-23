@@ -6,7 +6,7 @@ async function fetchAbiData(contractAddress: any) {
     try {
         return (
             await axios.get(
-                `https://api-testnet.polygonscan.com/api?module=contract&action=getabi&address=${contractAddress}&apikey=${explorerApiKey}`
+                `https://api-goerli.etherscan.io/api?module=contract&action=getabi&address=${contractAddress}&apikey=${explorerApiKey}`
             )
         ).data;
     } catch (error) {
