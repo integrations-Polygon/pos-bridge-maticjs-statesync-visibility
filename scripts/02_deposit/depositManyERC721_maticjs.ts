@@ -2,6 +2,7 @@ import sleep from "../../utils/sleep";
 import getMaticClient from "../../utils/setupMaticjsClient";
 import config from "../../utils/config";
 import ps from "prompt-sync";
+import { getStateId } from "../../utils/getStateId";
 const prompt = ps();
 const depositERC721 = async () => {
     try {
@@ -60,7 +61,12 @@ const depositERC721 = async () => {
         console.log("DEPOSIT - ROOTCHAINMANAGER PROXY CONTRACT");
         console.log("-----------------------------------------\n");
         let depositResponse = await erc721RootToken.depositMany(tokenIds, config.user);
-        console.log("Deposit transaction hash: ", await depositResponse.getTransactionHash());
+
+        const transactionHash: string = await depositResponse.getTransactionHash();
+        const stateId: number = await getStateId(transactionHash);
+
+        console.log(`stateId: ${stateId}`);
+        console.log("Deposit transaction hash: ", transactionHash);
         console.log(
             `Transaction details: https://goerli.etherscan.io/tx/${await depositResponse.getTransactionHash()}`
         );

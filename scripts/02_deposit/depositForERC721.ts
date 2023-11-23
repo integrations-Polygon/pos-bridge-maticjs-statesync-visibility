@@ -2,6 +2,7 @@ import fetchAbiData from "../../utils/fetchAbiData";
 import config from "../../utils/config";
 import { ethers } from "ethers";
 import dotenv from "dotenv";
+import { getStateId } from "../../utils/getStateId";
 import ps from "prompt-sync";
 const prompt = ps();
 dotenv.config();
@@ -46,8 +47,7 @@ const despositForERC721 = async () => {
         */
         const rootTokenAddress = config.rootToken;
         const rootTokenABIData_response = await fetchAbiData(rootTokenAddress);
-        const rootTokenABIData = await rootTokenABIData_response.json();
-        const rootTokenABI = rootTokenABIData.result;
+        const rootTokenABI = rootTokenABIData_response.result;
 
         /* 
             INITIALIZE ROOT TOKEN INSTANCE AND CONNECT WITH SIGNER
@@ -76,8 +76,8 @@ const despositForERC721 = async () => {
         */
         const rootChainManagerAddress = config.rootChainManager;
         const rootChainManagerABIData_response = await fetchAbiData(rootChainManagerAddress);
-        const rootChainManagerABIData = await rootChainManagerABIData_response.json();
-        const rootChainManagerABI = rootChainManagerABIData.result;
+
+        const rootChainManagerABI = rootChainManagerABIData_response.result;
 
         /* 
             INITIALIZE ROOT CHAIN MAMANGER INSTANCE 
@@ -111,7 +111,11 @@ const despositForERC721 = async () => {
         );
         await depositFor_response.wait(1);
 
-        console.log("Deposit transaction hash: ", depositFor_response.hash);
+        const transactionHash: string = depositFor_response.hash;
+        const stateId: number = await getStateId(transactionHash);
+
+        console.log(`stateId: ${stateId}`);
+        console.log("Deposit transaction hash: ", transactionHash);
         console.log(`Transaction details: https://goerli.etherscan.io/tx/${depositFor_response.hash}`);
         console.log(`\nToken Deposited successfully to ERC721Predicate Contract`);
     } catch (error) {
