@@ -3,7 +3,7 @@ pragma solidity 0.8.7;
 
 import "@openzeppelin/contracts/access/Ownable.sol";
 import { ContextMixin } from "../utils/ContextMixin.sol";
-import { IChildToken } from "./interface/IChildToken.sol";
+import { IChildToken } from "../interfaces/IChildToken.sol";
 import { AccessControlMixin } from "../utils/AccessControlMixin.sol";
 import { NativeMetaTransaction } from "../utils/NativeMetaTransaction.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
