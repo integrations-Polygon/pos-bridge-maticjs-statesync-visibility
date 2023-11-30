@@ -26,6 +26,9 @@ const config: HardhatUserConfig = {
     solidity: {
         compilers: [
             {
+                version: "0.5.11",
+            },
+            {
                 version: "0.8.7",
             },
             {
