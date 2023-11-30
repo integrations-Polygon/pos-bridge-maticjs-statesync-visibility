@@ -10,7 +10,6 @@ export const getStateId = async (transactionHash: string): Promise<number> => {
             USING INFURA PROVIDER
         */
         const provider = new ethers.providers.InfuraProvider("goerli", projectID);
-
         const txReceipt = await provider.getTransactionReceipt(transactionHash);
         const topics = txReceipt.logs.map((l) => l.topics);
 
