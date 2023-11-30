@@ -1,8 +1,8 @@
 import fetchAbiData from "../../utils/fetchAbiData";
+import { getStateId } from "../../utils/getStateId";
 import config from "../../utils/config";
 import { ethers } from "ethers";
 import dotenv from "dotenv";
-import { getStateId } from "../../utils/getStateId";
 import ps from "prompt-sync";
 const prompt = ps();
 dotenv.config();
@@ -45,15 +45,19 @@ const despositForERC721 = async () => {
         /* 
             FETCH ROOT CHAIN MANAGER ABI DATA FROM THE EXPLORER
         */
-        const rootTokenAddress = config.rootToken;
-        const rootTokenABIData_response = await fetchAbiData(rootTokenAddress);
-        const rootTokenABI = rootTokenABIData_response.result;
+        const erc721RootTokenAddress = config.erc721RootToken;
+        const erc721RootTokenABIData_response = await fetchAbiData(erc721RootTokenAddress);
+        const erc721RootTokenABI = erc721RootTokenABIData_response.result;
 
         /* 
             INITIALIZE ROOT TOKEN INSTANCE AND CONNECT WITH SIGNER
         */
-        const rootTokenInstance = new ethers.Contract(rootTokenAddress, rootTokenABI, provider);
-        const rootToken = rootTokenInstance.connect(signer);
+        const erc721RootTokenInstance = new ethers.Contract(
+            erc721RootTokenAddress,
+            erc721RootTokenABI,
+            provider
+        );
+        const erc721RootToken = erc721RootTokenInstance.connect(signer);
 
         /* 
             APPROVE ERC721 PREDICATE CONTRACT 
@@ -62,7 +66,7 @@ const despositForERC721 = async () => {
         console.log("APPROVE - ERC721 PREDICATE PROXY CONTRACT");
         console.log("-----------------------------------------\n");
         for (let i = 0; i < totalArgs; i++) {
-            let approveResponse = await rootToken.approve(config.ERC721PredicateProxy, tokenIds[i]);
+            let approveResponse = await erc721RootToken.approve(config.ERC721PredicateProxy, tokenIds[i]);
             await approveResponse.wait(1); // wait for 1 block confirmation
             console.log(`Approve transaction hash for tokenId ${tokenIds[i]}: `, approveResponse.hash);
             console.log(`Transaction details: https://goerli.etherscan.io/tx/${approveResponse.hash}`);
@@ -106,7 +110,7 @@ const despositForERC721 = async () => {
 
         const depositFor_response = await rootChainManagerProxy.depositFor(
             config.user,
-            config.rootToken,
+            config.erc721RootToken,
             depositData
         );
         await depositFor_response.wait(1);

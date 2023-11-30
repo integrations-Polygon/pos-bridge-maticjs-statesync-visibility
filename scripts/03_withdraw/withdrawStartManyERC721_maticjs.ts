@@ -28,7 +28,7 @@ const withdrawERC721 = async () => {
         SETUP MATIC CLIENT
     */
     const posClient = await getMaticClient();
-    let erc721ChildToken = await posClient.erc721(config.childToken);
+    let erc721ChildToken = await posClient.erc721(config.erc721ChildToken);
 
     /* ---------------- BURN THE BATCH ERC 721 ON CHILD ----------------- */
 

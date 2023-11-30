@@ -50,23 +50,27 @@ const withdrawbatch_contract = async () => {
         /* 
             FETCH CHILD CHAIN MANAGER ABI DATA FROM THE EXPLORER
         */
-        const childTokenAddress = config.childToken;
-        const childTokenABIData_response = await fetchAbiData(childTokenAddress);
-        const childTokenManagerABI = childTokenABIData_response.result;
+        const erc721ChildTokenAddress = config.erc721ChildToken;
+        const erc721ChildTokenABIData_response = await fetchAbiData(erc721ChildTokenAddress);
+        const erc721ChildTokenManagerABI = erc721ChildTokenABIData_response.result;
         /* 
             INITIATE INTERFACE
         */
-        const iface = new ethers.utils.Interface(childTokenManagerABI);
+        const iface = new ethers.utils.Interface(erc721ChildTokenManagerABI);
 
         /* 
             INITIALIZE ROOT CHAIN MAMANGER INSTANCE 
         */
-        const childTokenInstance = new ethers.Contract(childTokenAddress, childTokenManagerABI, provider);
+        const childTokenInstance = new ethers.Contract(
+            erc721ChildTokenAddress,
+            erc721ChildTokenManagerABI,
+            provider
+        );
         const childTokenManager = childTokenInstance.connect(signer);
 
         const estimatedGasLimit = await provider.estimateGas({
             type: 2,
-            to: childTokenAddress,
+            to: erc721ChildTokenAddress,
             from: config.user,
             nonce: nonce,
             gasLimit: 14_999_999,

@@ -1,6 +1,7 @@
-import sleep from "../../utils/sleep";
 import getMaticClient from "../../utils/setupMaticjsClient";
+import { getStateId } from "../../utils/getStateId";
 import config from "../../utils/config";
+import sleep from "../../utils/sleep";
 import ps from "prompt-sync";
 const prompt = ps();
 
@@ -21,7 +22,7 @@ const depositERC20 = async () => {
             SETUP MATIC CLIENT
         */
         const posClient = await getMaticClient();
-        let rootToken = await posClient.erc20(config.erc20RootToken, true);
+        let erc20RootToken = await posClient.erc20(config.erc20RootToken, true);
 
         /* ---------------------------- APPROVE ---------------------------- */
 
@@ -32,7 +33,7 @@ const depositERC20 = async () => {
         console.log("APPROVE - ERC20 PREDICATE PROXY CONTRACT");
         console.log("-----------------------------------------\n");
 
-        let approveResponse = await rootToken.approve(amount);
+        let approveResponse = await erc20RootToken.approve(amount);
         await sleep(20000); // wait at least 15 for state change in goerli
         console.log(`Approve transaction hash: `, await approveResponse.getTransactionHash());
         console.log(
@@ -49,12 +50,17 @@ const depositERC20 = async () => {
         console.log("\n-----------------------------------------");
         console.log("DEPOSIT - ROOTCHAINMANAGER PROXY CONTRACT");
         console.log("-----------------------------------------\n");
-        let depositResponse = await rootToken.deposit(amount, config.user);
-        console.log("Deposit transaction hash: ", await depositResponse.getTransactionHash());
-        console.log(
-            `Transaction details: https://goerli.etherscan.io/tx/${await depositResponse.getTransactionHash()}`
-        );
-        console.log(`\nToken Deposited successfully to ERC721Predicate Contract`);
+        let depositResponse = await erc20RootToken.deposit(amount, config.user);
+
+        const transactionHash: string = await depositResponse.getTransactionHash();
+        await sleep(20000);
+
+        const stateId: number = await getStateId(transactionHash);
+
+        console.log(`stateId: ${stateId}`);
+        console.log("Deposit transaction hash: ", transactionHash);
+        console.log(`Transaction details: https://goerli.etherscan.io/tx/${transactionHash}`);
+        console.log(`\nToken Deposited successfully to ERC20Predicate Contract`);
     } catch (error) {
         console.log("Error in despositERC20: ", error);
     }

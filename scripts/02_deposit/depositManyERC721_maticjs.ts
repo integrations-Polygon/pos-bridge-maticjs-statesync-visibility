@@ -1,10 +1,10 @@
-import sleep from "../../utils/sleep";
 import getMaticClient from "../../utils/setupMaticjsClient";
-import config from "../../utils/config";
-import ps from "prompt-sync";
 import { getStateId } from "../../utils/getStateId";
+import config from "../../utils/config";
+import sleep from "../../utils/sleep";
+import ps from "prompt-sync";
 const prompt = ps();
-const depositERC721 = async () => {
+const depositManyERC721 = async () => {
     try {
         // Empty array to store user input arguments
         let tokenIds: any = [];
@@ -29,7 +29,7 @@ const depositERC721 = async () => {
             SETUP MATIC CLIENT
         */
         const posClient = await getMaticClient();
-        let erc721RootToken = await posClient.erc721(config.rootToken, true);
+        let erc721RootToken = await posClient.erc721(config.erc721RootToken, true);
 
         /* ---------------------------- APPROVE ---------------------------- */
 
@@ -41,7 +41,7 @@ const depositERC721 = async () => {
         console.log("-----------------------------------------\n");
         for (let i = 0; i < totalArgs; i++) {
             let approveResponse = await erc721RootToken.approve(tokenIds[i]);
-            await sleep(20000); // wait at least 15 for state change in goerli
+            await sleep(50000); // wait at least 15 for state change in goerli
             console.log(
                 `Approve transaction hash for tokenId ${tokenIds[i]}: `,
                 await approveResponse.getTransactionHash()
@@ -63,20 +63,20 @@ const depositERC721 = async () => {
         let depositResponse = await erc721RootToken.depositMany(tokenIds, config.user);
 
         const transactionHash: string = await depositResponse.getTransactionHash();
+        await sleep(50000);
+
         const stateId: number = await getStateId(transactionHash);
 
         console.log(`stateId: ${stateId}`);
         console.log("Deposit transaction hash: ", transactionHash);
-        console.log(
-            `Transaction details: https://goerli.etherscan.io/tx/${await depositResponse.getTransactionHash()}`
-        );
+        console.log(`Transaction details: https://goerli.etherscan.io/tx/${transactionHash}`);
         console.log(`\nToken Deposited successfully to ERC721Predicate Contract`);
     } catch (error) {
-        console.log("Error in despositERC721: ", error);
+        console.log("Error in depositManyERC721: ", error);
     }
 };
 
-depositERC721()
+depositManyERC721()
     .then(() => {
         console.log("\n\n---------- ENDING ALL PROCESS ----------\n\n");
         process.exit(0);
