@@ -1,6 +1,6 @@
 import { fetchGasPrice } from "../../utils/fetchGasPrice";
 import fetchAbiData from "../../utils/fetchAbiData";
-import config from "../../utils/config";
+import { getErc721ChildToken, getUser } from "../../config";
 import { ethers } from "ethers";
 import dotenv from "dotenv";
 import ps from "prompt-sync";
@@ -50,7 +50,7 @@ const withdrawbatch_contract = async () => {
         /* 
             FETCH CHILD CHAIN MANAGER ABI DATA FROM THE EXPLORER
         */
-        const erc721ChildTokenAddress = config.erc721ChildToken;
+        const erc721ChildTokenAddress = getErc721ChildToken();
         const erc721ChildTokenABIData_response = await fetchAbiData(erc721ChildTokenAddress);
         const erc721ChildTokenManagerABI = erc721ChildTokenABIData_response.result;
         /* 
@@ -71,7 +71,7 @@ const withdrawbatch_contract = async () => {
         const estimatedGasLimit = await provider.estimateGas({
             type: 2,
             to: erc721ChildTokenAddress,
-            from: config.user,
+            from: getUser(),
             nonce: nonce,
             gasLimit: 14_999_999,
             maxPriorityFeePerGas: maxPriorityFee,

@@ -1,5 +1,5 @@
 import getMaticClient from "../../utils/setupMaticjsClient";
-import config from "../../utils/config";
+import { getErc20ChildToken, getUser } from "../../config";
 import ps from "prompt-sync";
 const prompt = ps();
 
@@ -19,7 +19,7 @@ const withdrawERC20 = async () => {
         SETUP MATIC CLIENT
     */
     const posClient = await getMaticClient();
-    let erc20ChildToken = await posClient.erc20(config.erc20ChildToken);
+    let erc20ChildToken = await posClient.erc20(getErc20ChildToken());
 
     /* ---------------- BURN THE BATCH ERC20 ON CHILD ----------------- */
 
@@ -27,7 +27,7 @@ const withdrawERC20 = async () => {
         USING MATICJS SDK BURN BATCH ERC20
     */
     const withdrawStart_response = await erc20ChildToken.withdrawStart(amount, {
-        from: config.user,
+        from: getUser(),
     });
 
     console.log("Transaction Hash: ", await withdrawStart_response.getTransactionHash());

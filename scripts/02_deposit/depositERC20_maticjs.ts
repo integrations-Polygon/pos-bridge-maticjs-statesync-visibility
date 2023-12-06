@@ -1,6 +1,6 @@
 import getMaticClient from "../../utils/setupMaticjsClient";
 import { getStateId } from "../../utils/getStateId";
-import config from "../../utils/config";
+import { getErc20RootToken, getUser } from "../../config";
 import sleep from "../../utils/sleep";
 import ps from "prompt-sync";
 const prompt = ps();
@@ -22,7 +22,7 @@ const depositERC20 = async () => {
             SETUP MATIC CLIENT
         */
         const posClient = await getMaticClient();
-        let erc20RootToken = await posClient.erc20(config.erc20RootToken, true);
+        let erc20RootToken = await posClient.erc20(getErc20RootToken(), true);
 
         /* ---------------------------- APPROVE ---------------------------- */
 
@@ -50,7 +50,7 @@ const depositERC20 = async () => {
         console.log("\n-----------------------------------------");
         console.log("DEPOSIT - ROOTCHAINMANAGER PROXY CONTRACT");
         console.log("-----------------------------------------\n");
-        let depositResponse = await erc20RootToken.deposit(amount, config.user);
+        let depositResponse = await erc20RootToken.deposit(amount, getUser());
 
         const transactionHash: string = await depositResponse.getTransactionHash();
         await sleep(20000);

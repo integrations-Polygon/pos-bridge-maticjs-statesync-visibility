@@ -1,5 +1,5 @@
 import getMaticClient from "../../utils/setupMaticjsClient";
-import config from "../../utils/config";
+import { getErc721ChildToken, getUser } from "../../config";
 import ps from "prompt-sync";
 const prompt = ps();
 
@@ -28,7 +28,7 @@ const withdrawERC721 = async () => {
         SETUP MATIC CLIENT
     */
     const posClient = await getMaticClient();
-    let erc721ChildToken = await posClient.erc721(config.erc721ChildToken);
+    let erc721ChildToken = await posClient.erc721(getErc721ChildToken());
 
     /* ---------------- BURN THE BATCH ERC 721 ON CHILD ----------------- */
 
@@ -36,7 +36,7 @@ const withdrawERC721 = async () => {
         USING MATICJS SDK BURN BATCH ERC721
     */
     const withdrawStartMany_response = await erc721ChildToken.withdrawStartMany(tokenIds, {
-        from: config.user,
+        from: getUser(),
     });
 
     console.log("Transaction Hash: ", await withdrawStartMany_response.getTransactionHash());

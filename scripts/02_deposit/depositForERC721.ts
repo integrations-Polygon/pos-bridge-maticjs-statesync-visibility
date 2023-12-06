@@ -1,6 +1,12 @@
 import fetchAbiData from "../../utils/fetchAbiData";
 import { getStateId } from "../../utils/getStateId";
-import config from "../../utils/config";
+import {
+    getUser,
+    getErc721RootToken,
+    getErc721PredicateProxy,
+    getRootChainManager,
+    getRootChainManagerProxy,
+} from "../../config";
 import { ethers } from "ethers";
 import dotenv from "dotenv";
 import ps from "prompt-sync";
@@ -43,9 +49,9 @@ const despositForERC721 = async () => {
         /* ---------------------------- APPROVE ---------------------------- */
 
         /* 
-            FETCH ROOT CHAIN MANAGER ABI DATA FROM THE EXPLORER
+            FETCH ERC721 ROOT TOKEN ABI DATA FROM THE EXPLORER
         */
-        const erc721RootTokenAddress = config.erc721RootToken;
+        const erc721RootTokenAddress = getErc721RootToken();
         const erc721RootTokenABIData_response = await fetchAbiData(erc721RootTokenAddress);
         const erc721RootTokenABI = erc721RootTokenABIData_response.result;
 
@@ -66,7 +72,7 @@ const despositForERC721 = async () => {
         console.log("APPROVE - ERC721 PREDICATE PROXY CONTRACT");
         console.log("-----------------------------------------\n");
         for (let i = 0; i < totalArgs; i++) {
-            let approveResponse = await erc721RootToken.approve(config.ERC721PredicateProxy, tokenIds[i]);
+            let approveResponse = await erc721RootToken.approve(getErc721PredicateProxy, tokenIds[i]);
             await approveResponse.wait(1); // wait for 1 block confirmation
             console.log(`Approve transaction hash for tokenId ${tokenIds[i]}: `, approveResponse.hash);
             console.log(`Transaction details: https://goerli.etherscan.io/tx/${approveResponse.hash}`);
@@ -78,7 +84,7 @@ const despositForERC721 = async () => {
         /* 
             FETCH ROOT CHAIN MANAGER ABI DATA FROM THE EXPLORER
         */
-        const rootChainManagerAddress = config.rootChainManager;
+        const rootChainManagerAddress = getRootChainManager();
         const rootChainManagerABIData_response = await fetchAbiData(rootChainManagerAddress);
 
         const rootChainManagerABI = rootChainManagerABIData_response.result;
@@ -106,11 +112,11 @@ const despositForERC721 = async () => {
         console.log("DEPOSIT - ROOTCHAINMANAGER PROXY CONTRACT");
         console.log("-----------------------------------------\n");
 
-        const rootChainManagerProxy = rootChainManager.attach(config.rootChainManagerProxy);
+        const rootChainManagerProxy = rootChainManager.attach(getRootChainManagerProxy());
 
         const depositFor_response = await rootChainManagerProxy.depositFor(
-            config.user,
-            config.erc721RootToken,
+            getUser(),
+            erc721RootTokenAddress,
             depositData
         );
         await depositFor_response.wait(1);

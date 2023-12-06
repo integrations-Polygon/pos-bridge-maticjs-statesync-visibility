@@ -1,5 +1,5 @@
 import getMaticClient from "../../utils/setupMaticjsClient";
-import config from "../../utils/config";
+import { getErc721RootToken } from "../../config";
 import ps from "prompt-sync";
 const prompt = ps();
 
@@ -21,7 +21,7 @@ const withdrawExitOnIndexERC721 = async () => {
         SETUP MATIC CLIENT
     */
     const posClient = await getMaticClient();
-    let erc721RootToken = await posClient.erc721(config.erc721RootToken, true);
+    let erc721RootToken = await posClient.erc721(getErc721RootToken(), true);
 
     /* ----------------------- SUBMIT BURN PROOF ------------------------- */
 

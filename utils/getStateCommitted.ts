@@ -1,4 +1,4 @@
-import config from "./config";
+import { getStateReceiver } from "./../config";
 import { ethers } from "ethers";
 import { abi } from "../artifacts/src/Mumbai/StateReceiver.sol/StateReceiver.json";
 import dotenv from "dotenv";
@@ -35,7 +35,7 @@ const getStateCommitted = async () => {
         /* 
             FETCH STATERECEIVER ADDRESS AND ABI DATA 
         */
-        const stateReceiverAddress = config.stateReceiver;
+        const stateReceiverAddress = getStateReceiver();
         const stateReceiverABI = abi;
 
         /* 
